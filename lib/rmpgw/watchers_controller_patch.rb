@@ -1,0 +1,48 @@
+module Rmpgw
+  module WatchersControllerPatch
+    def self.included(base)
+      base.send :include, InstanceMethods
+
+      base.class_eval do
+        alias_method_chain :autocomplete_for_user, :rmpgw
+        alias_method_chain :append, :rmpgw
+        alias_method_chain :create, :rmpgw
+      end
+    end
+
+    module InstanceMethods
+      def autocomplete_for_user_with_rmpgw
+        if params[:object_type].blank? || params[:object_type] == 'issue'
+          @users = Group.sorted.like(params[:q]).to_a + User.active.sorted.like(params[:q]).limit(100).all
+          if @watched
+            @users -= @watched.watcher_users
+          end
+          render layout: false
+        else
+          autocomplete_for_user_without_rmpgw
+        end
+      end
+
+      def append_with_rmpgw
+        if params[:watcher].is_a?(Hash)
+          user_ids = params[:watcher][:user_ids] || [params[:watcher][:user_id]] || []
+          @users = User.includes(:groups).active.where("groups_users.id in (:user_ids) or #{User.table_name}.id in (:user_ids)", user_ids: user_ids + [0]).uniq.sorted
+        end
+      end
+
+      def create_with_rmpgw
+        if @watched.is_a?(Issue)
+          if params[:watcher].is_a?(Hash)
+            user_ids = (params[:watcher][:user_ids] || params[:watcher][:user_id])
+          else
+            user_ids = params[:user_id]
+          end
+          params[:watcher] = {}
+          params[:watcher][:user_id] = User.includes(:groups).active.where("groups_users.id in (:user_ids) or #{User.table_name}.id in (:user_ids)", user_ids: user_ids + [0]).uniq.sorted.map(&:id)
+        end
+
+        create_without_rmpgw
+      end
+    end
+  end
+end
