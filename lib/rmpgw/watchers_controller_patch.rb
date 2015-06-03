@@ -13,7 +13,7 @@ module Rmpgw
     module InstanceMethods
       def autocomplete_for_user_with_rmpgw
         if params[:object_type].blank? || params[:object_type] == 'issue'
-          @users = Group.sorted.like(params[:q]).to_a + User.active.sorted.like(params[:q]).limit(100).all
+          @users = Group.sorted.like(params[:q]).limit(100).to_a + User.active.sorted.like(params[:q]).limit(100).all
           if @watched
             @users -= @watched.watcher_users
           end
