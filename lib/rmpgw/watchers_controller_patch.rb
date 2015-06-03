@@ -30,7 +30,7 @@ module Rmpgw
       def append_with_rmpgw
         if params[:watcher].is_a?(Hash)
           user_ids = params[:watcher][:user_ids] || [params[:watcher][:user_id]] || []
-          @users = User.includes(:groups).active.where("groups_users.id in (:user_ids) or #{User.table_name}.id in (:user_ids)", user_ids: user_ids + [0]).uniq.sorted
+          @users = User.joins("LEFT JOIN groups_users on groups_users.user_id = #{User.table_name}.id").active.where("groups_users.group_id in (:user_ids) or #{User.table_name}.id in (:user_ids)", user_ids: user_ids + [0]).uniq.sorted
         end
       end
 
@@ -42,7 +42,7 @@ module Rmpgw
             user_ids = params[:user_id]
           end
           params[:watcher] = {}
-          params[:watcher][:user_id] = User.includes(:groups).active.where("groups_users.id in (:user_ids) or #{User.table_name}.id in (:user_ids)", user_ids: user_ids + [0]).uniq.sorted.map(&:id)
+          params[:watcher][:user_id] = User.joins("LEFT JOIN groups_users on groups_users.user_id = #{User.table_name}.id").active.where("groups_users.group_id in (:user_ids) or #{User.table_name}.id in (:user_ids)", user_ids: user_ids + [0]).uniq.sorted.map(&:id)
         end
 
         create_without_rmpgw

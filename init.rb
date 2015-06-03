@@ -10,7 +10,7 @@ Redmine::Plugin.register :rmp_group_watchers do
   url 'http://rlt.ru/'
   author_url 'http://rmplus.pro'
 
-  requires_redmine version: '2.3.0'..'2.5.0'
+  # requires_redmine version: '2.3.0'..'2.5.0'
 end
 
 Rails.application.config.to_prepare do

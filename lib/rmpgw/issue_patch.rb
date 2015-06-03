@@ -22,7 +22,7 @@ module Rmpgw
       def watcher_user_ids_with_rmpgw=(user_ids)
         if user_ids.is_a?(Array)
           user_ids = user_ids.uniq
-          user_ids = User.includes(:groups).active.where("groups_users.id in (:user_ids) or #{User.table_name}.id in (:user_ids)", user_ids: user_ids + [0]).uniq.sorted.map(&:id)
+          user_ids = User.joins("LEFT JOIN groups_users on groups_users.user_id = #{User.table_name}.id").active.where("groups_users.group_id in (:user_ids) or #{User.table_name}.id in (:user_ids)", user_ids: user_ids + [0]).uniq.sorted.map(&:id)
         end
 
         send :watcher_user_ids_without_rmpgw=, user_ids
