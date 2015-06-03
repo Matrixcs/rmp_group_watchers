@@ -1,9 +1,10 @@
 # RMP Group Watchers plugin
 # Copyright (C) 2015 Kovalevsky Vasil (RMPlus company)
+# Developed by Kovalevsky Vasil by order of "vira realtime" http://rlt.ru/
 
 Redmine::Plugin.register :rmp_group_watchers do
   name 'RMP Group Watchers plugin'
-  author 'Developed by Kovalevsky Vasil by order of "vira realtime" http://rlt.ru/'
+  author 'Kovalevsky Vasil'
   description 'This is a plugin for adding users from group to issue watchers. Developed by order of "vira realtime"'
   version '1.0.0'
   url 'http://rlt.ru/'

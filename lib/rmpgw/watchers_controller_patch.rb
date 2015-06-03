@@ -1,3 +1,7 @@
+# RMP Group Watchers plugin
+# Copyright (C) 2015 Kovalevsky Vasil (RMPlus company)
+# Developed by Kovalevsky Vasil by order of "vira realtime" http://rlt.ru/
+
 module Rmpgw
   module WatchersControllerPatch
     def self.included(base)
