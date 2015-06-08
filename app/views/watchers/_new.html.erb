@@ -17,7 +17,7 @@
                                                                                                            :project_id => @project) }')" %>
 
   <div id="users_for_watcher">
-    <%= principals_check_box_tags 'watcher[user_ids][]', (watched ? watched.addable_watcher_users : Group.sorted.limit(100) + User.active.limit(100)) %>
+    <%= principals_check_box_tags 'watcher[user_ids][]', (watched ? watched.addable_watcher_users : Group.order(:lastname).where(type: 'Group').limit(100) + User.active.limit(100)) %>
   </div>
 
   <p class="buttons">

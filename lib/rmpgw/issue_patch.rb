@@ -16,7 +16,7 @@ module Rmpgw
     module InstanceMethods
       def addable_watcher_users_with_rmpgw
         users = addable_watcher_users_without_rmpgw
-        Group.sorted.to_a + users
+        Group.order(:lastname).where(type: 'Group').limit(100).to_a + users
       end
 
       def watcher_user_ids_with_rmpgw=(user_ids)
